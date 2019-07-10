@@ -37,9 +37,9 @@ public class done extends HttpServlet {
 	    String form1 = request.getParameter("form1");
 	    String form2 = request.getParameter("form2");
 	   
-	    System.out.println(name);
-	    System.out.println(message);
-	    System.out.println(service);
+	    System.out.println("name is "+name);
+	    System.out.println("message is "+message);
+	    System.out.println("service is " +service);
 	   
  
 	    
@@ -49,6 +49,8 @@ public class done extends HttpServlet {
 		
 	    int s=0;
 	    
+	   	    	
+	   if(form1!=null) 
 	   if(form1.equals("insert"))
 	   {
 		    if(service.equals("sequence")) {
@@ -93,10 +95,14 @@ public class done extends HttpServlet {
 	   
 	   request.setAttribute("come",p);
 	    
-	    
+	    if(form2!=null)
 	    if(form2.equals("view"))
     {
+	   System.out.println("entered the form2 in servlet");
 	    String nm = request.getParameter("date");
+	    
+	    System.out.println(nm + " value of date inside nm");
+	    
 	    if(nm !=null)
 	    {
 	    ArrayList<ArrayList<String>> arl = null;
@@ -106,13 +112,18 @@ public class done extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("array list forwarded from servlet to jsp");
 	    request.setAttribute("ArrayList", arl);
 	    RequestDispatcher rd = request.getRequestDispatcher("done.jsp");
 	    rd.forward(request,response);
 	    }
 	}
-	}
 	
+	    }
+	    
+	}
 
 
-}
+
+

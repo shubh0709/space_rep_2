@@ -28,7 +28,7 @@
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
 	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/select2R/dist/css/select2.min.css">
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
 	<!--===============================================================================================-->
@@ -98,6 +98,7 @@
 
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">
+		<div>
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 					<span class="icon-bar"></span>
@@ -112,10 +113,15 @@
 					<li><a href="#">About</a></li>
 					<li><a href="#">Projects</a></li>
 					<li><a href="#">Contact</a></li>
-
 				</ul>
-
+				<div class="nav navbar-nav navbar-right btn btn-info">
+			<form action="LogoutServlet" method="post">
+               <button type="submit"> Logout</button>
+           </form>
+            </div>
 			</div>
+			
+            </div>
 		</div>
 	</nav>
 
@@ -141,7 +147,7 @@
 				<div class="wrap-input100 input100-select">
 					
 					<div>
-						<select class="selection-2" name="service" onchange="chng(this.value)">
+						<select  name="service" onchange="chng(this.value)">
 							<option value="sequence">Scientific Dates</option>
 							<option value="random">Random Dates</option>
 						</select>
@@ -179,7 +185,7 @@
 			<div class="container">
    <div class="row mdp" style="display:none">
     <input type="text" class="date" autocomplete="off" placeholder="Pick the multiple dates" name="dates">
-    <!-- <input type = "submit" value= "v_b_d"> -->
+     <!-- <input type = "submit" value= "v_b_d">  -->
 </div>
 </div>
 <script>
@@ -190,9 +196,9 @@ function chng(val) {
 	 $(".mdp").css("display","block");
 	 
  }
- else 
+ else {
 	 $(".mdp").css("display","none");
-
+ }
 }
 
 </script>		
@@ -228,11 +234,16 @@ function chng(val) {
 									<form type="text/html" action= "done"  method="post" id="form_id">
 										<div class="input-group input-group-sm" >
 										    <div class="col-md-6">
-											<input type="text" class="form-control pull-right" placeholder="Search">
+											<input type="text"  class="form-control pull-right" name="date" placeholder="yyyy-mm-dd or task_name">
                                            </div>
                                            <div class="col-md-6">
                                            <button type="submit" class="btn btn-primary" value="view" name="form2"><i class="fa fa-search"></i></button>
 										  </div>
+										  <script>
+										   function defaultCall(){						
+                                            document.getElementById("form_id").submit();// Form submission                                       
+										 }
+                                            </script>
 										  </div>
 										</form>
 									</div>
@@ -253,7 +264,7 @@ function chng(val) {
 										<!-- ==================================Printing the view here =========================== -->
 
 										<% 
-  
+  System.out.println("reached here 1");
    LocalDate date = LocalDate.now();
    String dt = date.toString();
      if(request.getParameter("date") !=null){
@@ -269,7 +280,8 @@ function chng(val) {
     	 arl = Data_handle.view_by_name(dt);
     	}
       
-    	   
+     System.out.println("reached here 2");
+
        int i=0; 
     	 
        for(ArrayList<String> obj:arl){ // iterate 
@@ -277,8 +289,12 @@ function chng(val) {
 										<tr>
 											<td> <%=++i %> </td>
 											<td> <%=obj.get(0) %></td>
+											<%      System.out.print(obj.get(0)+"  ");	%>
+										
 											<td> <%=obj.get(1) %></td>
+											<%      System.out.println(obj.get(1)+"  ");	%>
 											<td> <%=obj.get(2) %></td>
+											<%      System.out.println(obj.get(2)+"  ");	%>
 										</tr>
 
 										<%
@@ -314,7 +330,7 @@ function chng(val) {
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 	<!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
+	<script src="vendor/select2R/dist/js/select2.min.js"></script>
 	<script>
 		$(".selection-2").select2({
 			minimumResultsForSearch: 20,

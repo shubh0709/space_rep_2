@@ -19,6 +19,9 @@ import javax.servlet.http.HttpSession;
 //not including  mysql connector insde lib will result in an error stating driver connection is not happening
 
 public class Data_handle {
+	private static HttpSession session;
+	private static int l;
+
 	// class ka naam ka first letter capital rakho otherwise you wont get proposals
 	// , when
 	// you call a certain method of the class
@@ -75,8 +78,10 @@ public class Data_handle {
 		try {
 			rs = stmt.executeQuery("select max(id)+1 as l_id from register");
 			rs.last();
-			int lid = rs.getInt("l_id");
+			int lid =Integer.parseInt(rs.getString("l_id"));
+
 			s = stmt.executeUpdate("INSERT INTO tasks (name,user_id)  VALUES ('" + s1 + "','" + lid + "')");
+			
 			rs = stmt.executeQuery("select max(id) as last_id from tasks");
 
 			// faced the error : exception-before-start-of-result-set
@@ -87,8 +92,7 @@ public class Data_handle {
 			// so either do rs.next() or point to last element
 			System.out.println("step2");
 			rs.last();
-			int lastid = rs.getInt("last_id");
-			// System.out.println(lastid);
+			int lastid = Integer.parseInt(rs.getString("last_id"));			// System.out.println(lastid);
 
 			String arr[] = date.split(",");
 
@@ -118,8 +122,6 @@ public class Data_handle {
 					  stmt.executeUpdate("INSERT INTO task_dates (task_id, date) VALUES ('" +
 					  lastid + "' , '"+arr[i]+"'"); }
 					 
-			
-			
 			
 			
 			// l tells no. of columns of data changed
@@ -162,7 +164,7 @@ public class Data_handle {
 		Statement stmt = con.createStatement();
 		ResultSet rs=null;
 		int s=0;
-
+		System.out.println("step1");
 		try {
 		rs = stmt.executeQuery("select max(id) as l_id from register");
 		
@@ -174,7 +176,8 @@ public class Data_handle {
 	     s = stmt.executeUpdate("INSERT INTO tasks (name,user_id)  VALUES ('" + s1 + "','" + lid + "')");
 	   
 		rs = stmt.executeQuery("select max(id) as last_id from tasks");
-		
+		System.out.println("step2");
+
 		rs.last();
 		int lastid = Integer.parseInt(rs.getString("last_id"));
 		// System.out.println(lastid);
@@ -188,13 +191,16 @@ public class Data_handle {
 		 * LocalDate.now().plusDays(90); LocalDate date2 =
 		 * LocalDate.now().plusDays(180);
 		 */
-		
+		System.out.println("step3");
 		int a[] = { 1, 7, 15, 30, 60, 90, 180 };
 		for (int i = 0; i < 6; i++) {
+			
 			LocalDate date = LocalDate.now().plusDays(a[i]);
-			int l = stmt.executeUpdate(
+	         l = stmt.executeUpdate(
 					"INSERT INTO task_dates (task_id, date) VALUES ('" + lastid + "' , '" + date + "' )");
+	         System.out.println("inserting  id="+ lastid + "date=" + date);
 		}
+		
 		
 		System.out.println("step4**");
 	}
@@ -272,22 +278,21 @@ public class Data_handle {
 
 		ResultSet rs = stmt.executeQuery("select max(id) as l_id from register");
 		rs.last();
-//		int lid = rs.getInt("l_id");
+		int lid =Integer.parseInt(rs.getString("l_id"));
 
-	//	HttpSession session = null;
-	//	int uid=Integer.parseInt((String)session.getAttribute("uid"));
 		rs = stmt.executeQuery(
-				"SELECT t.date,td.complete,t.* FROM tasks t join task_dates td on td.task_id=t.id WHERE date(t.date) ='"
-						+ date + "' and t.user_id=uid");
+				"SELECT td.date,td.complete,t.user_id,t.id,name FROM tasks t join task_dates td on td.task_id=t.id WHERE date(td.date) ='"
+						+ date + "' and t.user_id= '" + lid + "' ");
 
 		
 		  System.out.println(
-		 "SELECT t.date,td.complete,t.* FROM tasks t join task_dates td on td.task_id=t.id WHERE t.date ='"
-		  + date + "'");
-		 
+		 "SELECT t.date,td.complete,t.* FROM tasks t join task_dates td on td.task_id=t.id WHERE td.date ='"
+		  + date + "' and t.user_id='"+lid+"'");
+		 int z=0;
 		ArrayList<ArrayList<String>> al = new ArrayList<ArrayList<String>>();
 		while (rs.next()) {
-			System.out.println(rs.getString("name") + rs.getString("date") + rs.getString("complete"));
+			z++;
+			System.out.println(rs.getString("name") + rs.getString("date") + rs.getString("complete")+ "  "+ z);
 
 			ArrayList<String> A1 = new ArrayList<String>();
 
